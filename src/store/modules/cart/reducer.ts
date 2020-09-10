@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
 import produce from "immer";
-import { ICartState } from "./types";
+import { ICartState, ActionTypes } from "./types";
 
 const INITIAL_STATE: ICartState = {
   items: [],
@@ -13,7 +13,7 @@ const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
   //No final, o produce compara o rascunho com o state e faz as alteraçōes de forma automatica
   return produce(state, (draft) => {
     switch (action.type) {
-      case "ADD_PRODUCT_TO_CART_SUCCESS": {
+      case ActionTypes.addProductToCartSuccess: {
         // Só chamos o reducer quando der sucesso na action
         const { product } = action.payload;
 
@@ -33,7 +33,7 @@ const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
 
         break;
       }
-      case "ADD_PRODUCT_TO_CART_FAILURE": {
+      case ActionTypes.addProductToCartFailure: {
         draft.failedStockCheck.push(action.payload.productId);
         break;
       }
