@@ -4,6 +4,7 @@ import { ICartState } from "./types";
 
 const INITIAL_STATE: ICartState = {
   items: [],
+  failedStockCheck: [],
 };
 
 // No 1º momento, em vez de vir undefined, o state fica como INITIAL_STATE
@@ -33,8 +34,7 @@ const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
         break;
       }
       case "ADD_PRODUCT_TO_CART_FAILURE": {
-        console.log("Falta de stock", action.payload);
-
+        draft.failedStockCheck.push(action.payload.productId);
         break;
       }
       default: {
