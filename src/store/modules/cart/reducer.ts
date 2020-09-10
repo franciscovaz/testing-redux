@@ -12,7 +12,8 @@ const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
   //No final, o produce compara o rascunho com o state e faz as alteraçōes de forma automatica
   return produce(state, (draft) => {
     switch (action.type) {
-      case "ADD_PRODUCT_TO_CART": {
+      case "ADD_PRODUCT_TO_CART_SUCCESS": {
+        // Só chamos o reducer quando der sucesso na action
         const { product } = action.payload;
 
         const productInCartIndex = draft.items.findIndex(
