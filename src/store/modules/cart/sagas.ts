@@ -1,8 +1,19 @@
-import { all, takeLatest, select } from "redux-saga/effects";
-import { addProductToCartRequest } from "./actions";
+import { all, takeLatest, select, call, put } from "redux-saga/effects";
+import {
+  addProductToCartRequest,
+  addProductToCartSuccess,
+  addProductToCartFailure,
+} from "./actions";
 import { IState } from "../..";
+import api from "../../../services/api";
+import { AxiosResponse } from "axios";
 
 type CheckProductStockRequest = ReturnType<typeof addProductToCartRequest>;
+
+interface IStockResponse {
+  id: number;
+  quantity: number;
+}
 
 function* checkProductStock({ payload }: CheckProductStockRequest) {
   const { product } = payload;
@@ -14,8 +25,18 @@ function* checkProductStock({ payload }: CheckProductStockRequest) {
     );
   });
 
-  console.log(currentQuantity);
-  console.log("Vou adicionar ao carro");
+  const availableStockResponse: AxiosResponse<IStockResponse> = yield call(
+    api.get,
+    `stock/${product.id}`
+  );
+
+  if (availableStockResponse.data.quantity > currentQuantity) {
+    // PUT é o mesmo que o dispatch
+    // Todos os metodos que veem do SAGA levam com o yield
+    yield put(addProductToCartSuccess(product));
+  } else {
+    yield put(addProductToCartFailure(product.id));
+  }
 }
 
 export default all([
