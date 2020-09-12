@@ -28,7 +28,6 @@ export function addProductToCartFailure(productId: number) {
 }
 
 export function removeProductFromCartRequest(productId: number) {
-  console.log("Vamos remover: ", productId);
   return {
     type: ActionTypes.removeProductFromCartRequest,
     payload: {

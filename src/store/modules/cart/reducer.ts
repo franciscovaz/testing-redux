@@ -37,6 +37,26 @@ const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
         draft.failedStockCheck.push(action.payload.productId);
         break;
       }
+      case ActionTypes.removeProductFromCartRequest: {
+        const { productId } = action.payload;
+
+        const productInCartIndex = draft.items.findIndex(
+          (item) => item.product.id === productId
+        );
+
+        if (productInCartIndex >= 0) {
+          if (draft.items[productInCartIndex].quantity > 0) {
+            draft.items[productInCartIndex].quantity--;
+            // se quando remover chegar ao 0, remove do carro tambem
+            if (draft.items[productInCartIndex].quantity === 0) {
+              draft.items.splice(productInCartIndex, 1);
+            }
+          } else {
+            draft.items.splice(productInCartIndex, 1);
+          }
+        }
+        break;
+      }
       default: {
         return draft;
       }
