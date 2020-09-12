@@ -3,6 +3,7 @@ import {
   addProductToCartRequest,
   addProductToCartSuccess,
   addProductToCartFailure,
+  removeProductFromCartRequest,
 } from "./actions";
 import { IState } from "../..";
 import api from "../../../services/api";
@@ -11,6 +12,9 @@ import { ActionTypes } from "./types";
 
 type CheckProductStockRequest = ReturnType<typeof addProductToCartRequest>;
 
+type CheckProductRemovedRequest = ReturnType<
+  typeof removeProductFromCartRequest
+>;
 interface IStockResponse {
   id: number;
   quantity: number;
@@ -40,6 +44,16 @@ function* checkProductStock({ payload }: CheckProductStockRequest) {
   }
 }
 
+function* checkSomethingOnRemove({ payload }: CheckProductRemovedRequest) {
+  console.log("Middleware/Saga called");
+  const { productId } = payload;
+
+  console.log("Produto:", productId);
+
+  yield call(api.get, `stock/${productId}`);
+}
+
 export default all([
   takeLatest(ActionTypes.addProductToCartRequest, checkProductStock),
+  takeLatest(ActionTypes.removeProductFromCartRequest, checkSomethingOnRemove),
 ]);
