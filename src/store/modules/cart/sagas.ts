@@ -44,16 +44,16 @@ function* checkProductStock({ payload }: CheckProductStockRequest) {
   }
 }
 
-function* checkSomethingOnRemove({ payload }: CheckProductRemovedRequest) {
+/* function* checkSomethingOnRemove({ payload }: CheckProductRemovedRequest) {
   console.log("Middleware/Saga called");
   const { productId } = payload;
 
   console.log("Produto:", productId);
 
   yield call(api.get, `stock/${productId}`);
-}
+} */
 
 export default all([
   takeLatest(ActionTypes.addProductToCartRequest, checkProductStock),
-  takeLatest(ActionTypes.removeProductFromCartRequest, checkSomethingOnRemove),
+  // takeLatest(ActionTypes.removeProductFromCartRequest, checkSomethingOnRemove),
 ]);
